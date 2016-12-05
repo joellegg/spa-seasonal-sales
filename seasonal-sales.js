@@ -6,3 +6,8 @@ function getSeason () {
 
 var selectSeason = document.getElementById("season");
 selectSeason.addEventListener("change", getSeason);
+
+var productData = new XMLHttpRequest();
+productData.addEventListener('load', executeSomeCodeAfterLoad);
+productData.open("GET", "product.json");
+myRequest.send();
