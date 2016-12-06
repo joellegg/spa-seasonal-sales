@@ -1,15 +1,17 @@
-// product (products name), department (products categories_id === categories id), price (products price + categories discount)
+// product (products name), department (products categories_id === categories id then category name), price (products price + categories discount)
 var productData;
 var productCategories;
 var season;
 // reference to HTML products and categories
 var categoriesHTML = document.getElementById('categories');
 var productsHTML = document.getElementById('products');
+var productDepartment;
 
 function getSeason() {
     season = document.getElementById("season");
     season = season.options[season.selectedIndex].text;
     console.log(season)
+    discountedPrice();
 }
 // run productsToHTML function
     // run categoriesToParse function passing productData
@@ -25,20 +27,40 @@ function productsToParse(e) {
 // 5.
 function categoriesToParse(e) {
     productCategories = JSON.parse(e.target.responseText);
-    writeToHTML();
+    getSeason();
+    // try taking this function out to see if it will work without
+    // discountedPrice();
 }
 
 // 6.
+function discountedPrice() {
+    console.log('Dicounted price ', season)
+    if (season = productCategories.categories[0].season_discount) {
+        for (var i = 0; i < productData.products.length; i++) {
+            productData.products[i].price *= (1 - productCategories.categories[0].discount)
+        }
+    } else if (season = productCategories.categories[1].season_discount) {
+        for (var i = 0; i < productData.products.length; i++) {
+            productData.products[i].price *= (1 - productCategories.categories[1].discount)
+        }
+    } else if (season = productCategories.categories[2].season_discount) {
+        for (var i = 0; i < productData.products.length; i++) {
+            productData.products[i].price *= (1 - productCategories.categories[2].discount)
+        }
+    }
+    writeToHTML();
+}
+
+// 7.
 function writeToHTML() {
-    // change category id to category name
+    // change category id to category name (ie category_id 1 = apparel)
     for (var i = 0; i < productData.products.length; i++) {
-        var department = productData.products[i].category_id
-        if (department === 1) {
-            department = 'Winter';
-        } else if (department === 2) {
-            department = 'Autumn';
-        } else if (department === 3) {
-            department === 'Spring';
+        if (productData.products[i].category_id === productCategories.categories[0].id) {
+            productDepartment = productCategories.categories[0].name;
+        } else if (productData.products[i].category_id === productCategories.categories[1].id) {
+            productDepartment = productCategories.categories[1].name;
+        } else if (productData.products[i].category_id === productCategories.categories[2].id) {
+            productDepartment = productCategories.categories[2].name;
         } else {
             alert('missing department for ' + productData.products[i].name)
         }
@@ -46,23 +68,10 @@ function writeToHTML() {
         newDiv.innerHTML = `
             <h2>Item: ${productData.products[i].name}</h2>
             <h4>Price: ${productData.products[i].price}</h4>
-            <h4>Department: ${department}</h4>
+            <h4>Department: ${productDepartment}</h4>
         `;
         productsHTML.appendChild(newDiv);
     }
-    for (var i = 0; i < productCategories.categories.length; i++) {
-    var newDiv = document.createElement('div');
-    newDiv.innerHTML = `
-        <h2>The id is ${productCategories.categories[i].id}</h2>
-        <h4>The name is ${productCategories.categories[i].name}</h4>
-        <h4>The season is ${productCategories.categories[i].season_discount}</h4>
-        <h4>The discount is ${productCategories.categories[i].discount}</h4>
-    `;
-    categoriesHTML.appendChild(newDiv);
-    }
-    var discountedPrice = productData.products[0].price * (1 - productCategories.categories[0].discount);
-    console.log(discountedPrice.toFixed(2));
-    console.log('4.99 * (1-0.1) = 4.49');
 }
 
 // 2., 4.
