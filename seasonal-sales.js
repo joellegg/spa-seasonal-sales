@@ -10,13 +10,20 @@ var productDepartment;
 function getSeason() {
     season = document.getElementById("season");
     season = season.options[season.selectedIndex].text;
-    console.log(season)
     discountedPrice();
 }
 // run productsToHTML function
     // run categoriesToParse function passing productData
         // run discountFunction passing productData and productCategories
         // write to HTML the discounted price and misc data :)
+
+// 2., 4.
+function loadJSON (varData, functionToRun, jsonFile) {
+    var varData = new XMLHttpRequest();
+    varData.addEventListener('load', functionToRun);
+    varData.open("GET", jsonFile);
+    varData.send();
+}
 
 // 3.
 function productsToParse(e) {
@@ -34,25 +41,22 @@ function categoriesToParse(e) {
 
 // 6.
 function discountedPrice() {
-    console.log('Dicounted price ', season)
-    if (season = productCategories.categories[0].season_discount) {
+    if (season === productCategories.categories[0].season_discount) {
         for (var i = 0; i < productData.products.length; i++) {
-            productData.products[i].price *= (1 - productCategories.categories[0].discount)
+            productData.products[i].price *= (1 - productCategories.categories[0].discount);
+            console.log("the season is Winter", productData.products[i].price.toFixed(2));
         }
-    } else if (season = productCategories.categories[1].season_discount) {
+    } else if (season === productCategories.categories[1].season_discount) {
         for (var i = 0; i < productData.products.length; i++) {
-            productData.products[i].price *= (1 - productCategories.categories[1].discount)
+            productData.products[i].price *= (1 - productCategories.categories[1].discount);
+            console.log("the season is Autumn", productData.products[i].price.toFixed(2));
         }
-    } else if (season = productCategories.categories[2].season_discount) {
+    } else if (season === productCategories.categories[2].season_discount) {
         for (var i = 0; i < productData.products.length; i++) {
-            productData.products[i].price *= (1 - productCategories.categories[2].discount)
+            productData.products[i].price *= (1 - productCategories.categories[2].discount);
+            console.log("the season is Spring", productData.products[i].price.toFixed(2));
         }
     }
-    writeToHTML();
-}
-
-// 7.
-function writeToHTML() {
     // change category id to category name (ie category_id 1 = apparel)
     for (var i = 0; i < productData.products.length; i++) {
         if (productData.products[i].category_id === productCategories.categories[0].id) {
@@ -63,24 +67,17 @@ function writeToHTML() {
             productDepartment = productCategories.categories[2].name;
         } else {
             alert('missing department for ' + productData.products[i].name)
-        }
-        var newDiv = document.createElement('div');
-        newDiv.innerHTML = `
-            <h2>Item: ${productData.products[i].name}</h2>
-            <h4>Price: ${productData.products[i].price}</h4>
-            <h4>Department: ${productDepartment}</h4>
-        `;
-        productsHTML.appendChild(newDiv);
+    }
+    var newDiv = document.createElement('div');
+    newDiv.innerHTML = `
+        <h2>Item: ${productData.products[i].name}</h2>
+        <h4>Price: ${productData.products[i].price}</h4>
+        <h4>Department: ${productDepartment}</h4>
+    `;
+    productsHTML.appendChild(newDiv);
     }
 }
 
-// 2., 4.
-function loadJSON (varData, functionToRun, jsonFile) {
-    var varData = new XMLHttpRequest();
-    varData.addEventListener('load', functionToRun);
-    varData.open("GET", jsonFile);
-    varData.send();
-}
 
 // 1. This function will use the loadJSON function to load the json file and then run function productsToParse
 loadJSON(productData, productsToParse, 'products.json');
