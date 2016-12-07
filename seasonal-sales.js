@@ -50,7 +50,7 @@ function getCategory() {
             if (productData.products[i].category_id === productCategories.categories[k].id) {
                 productData.products[i].category_name = productCategories.categories[k].name;
                 productData.products[i].discounted_season = productCategories.categories[k].season_discount;
-                console.log("product dis, cat dis", productData.products[i].discounted_season, productCategories.categories[k].season_discount);
+                //console.log("product dis, cat dis", productData.products[i].discounted_season, productCategories.categories[k].season_discount);
                 //console.log("product-category", productData.products[i].category_name, productCategories.categories[k].name);
         }
     }
@@ -63,11 +63,11 @@ function discountedPrice() {
         for (var k = 0; k < productCategories.categories.length; k++) {
             if (currentSeason === productCategories.categories[k].season_discount && productData.products[i].category_name === productCategories.categories[k].name) {
                 productData.products[i].discounted_price = (productData.products[i].price * (1 - productCategories.categories[k].discount));
-                console.log('season discount', currentSeason, productCategories.categories[k].season_discount, productData.products[i].category_name, productCategories.categories[k].name);
+                //console.log('season discount', currentSeason, productCategories.categories[k].season_discount, productData.products[i].category_name, productCategories.categories[k].name);
             }
         }
     }
-    console.log(productData.products);
+    //console.log(productData.products);
     writeToHTML();
 }
 
